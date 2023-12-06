@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEllipsisH } from "react-icons/fa";
 import Swal from 'sweetalert2';
-const Dashboard3 = () => {
+const DashboardChild = () => {
     const [freeBusy, setFreeBusy] = useState('free');
     const [searchUsers, setSearchUsers] = useState([]);
     const {
@@ -23,18 +23,19 @@ const Dashboard3 = () => {
     });
 
     const freeButton = (id, update) => {
-        const information = {
+        const req = {auth:{ is_authourize: true },
+        data:{
             time: new Date().toLocaleTimeString(),
             date: new Date().toLocaleDateString(),
             id: id,
             status: update,
-        };
+        }};
         fetch(`http://localhost:5000/users`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify(information)
+            body: JSON.stringify(req)
         })
             .then(res => res.json())
             .then(data => {
@@ -242,7 +243,7 @@ const Dashboard3 = () => {
     );
 };
 
-export default Dashboard3;
+export default DashboardChild;
 
 
 
