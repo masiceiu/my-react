@@ -1,10 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Dropdown, Tab, Tabs } from 'react-bootstrap';
 import { useQuery } from "@tanstack/react-query";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaAngleRight, FaEllipsisH } from "react-icons/fa";
-import '../Pages/Dashboard.css'
+import { FaEllipsisH } from "react-icons/fa";
 import Swal from 'sweetalert2';
 const Dashboard3 = () => {
     const [freeBusy, setFreeBusy] = useState('free');
@@ -26,10 +24,10 @@ const Dashboard3 = () => {
 
     const freeButton = (id, update) => {
         const information = {
-            timeStatus: new Date().toLocaleTimeString(),
-            dateStatus: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString(),
+            date: new Date().toLocaleDateString(),
             id: id,
-            timeManagment: update,
+            status: update,
         };
         fetch(`http://localhost:5000/users`, {
             method: 'PATCH',
@@ -100,7 +98,7 @@ const Dashboard3 = () => {
                         <div key={item._id} className="mt-2 d-flex justify-content-between align-items-center p-2 gap-2" style={{ boxShadow: `rgba(0, 0, 0, 0.16) 0px 1px 4px` }}>
                             <div className="d-flex gap-3 align-items-center">
                                 {
-                                    item.timeManagment === 'free' ?
+                                    item.status === 'free' ?
 
                                         <div className=" position-relative">
 
@@ -141,7 +139,7 @@ const Dashboard3 = () => {
                                     <Dropdown.Menu className='dropdown-menu'>
                                        
                                         <Dropdown.Item href="#">
-                                            <small className=' justify-content-center align-items-center'>{item.timeStatus}</small>
+                                            <small className=' justify-content-center align-items-center'>{item.time}</small>
                                         </Dropdown.Item>
                                         <Dropdown.Item href="#">
                                             <small className=' justify-content-center align-items-center'> {item.email}</small>
@@ -149,7 +147,7 @@ const Dashboard3 = () => {
                                         <Dropdown.Divider />
                                        
                                         <Dropdown.Item href="#">
-                                            <i className="fas fa-user-alt pe-2"></i>{ item.timeManagment === 'busy' ? <button style={{ border: 'none' }} type="button" className="btn text-success"  onClick={()=>freeButton(item._id,'free')}>Free</button> : <button style={{ border: 'none' }} type="button" className="btn text-danger " onClick={()=>freeButton(item._id,'busy')}>Busy</button>}
+                                            <i className="fas fa-user-alt pe-2"></i>{ item.status === 'busy' ? <button style={{ border: 'none' }} type="button" className="btn text-success"  onClick={()=>freeButton(item._id,'free')}>Free</button> : <button style={{ border: 'none' }} type="button" className="btn text-danger " onClick={()=>freeButton(item._id,'busy')}>Busy</button>}
                                         </Dropdown.Item>
 
 
@@ -164,7 +162,7 @@ const Dashboard3 = () => {
                 </div>
             )}
             {freeBusy !== 'All' && (
-                users?.filter(item => item.timeManagment === freeBusy).map((item) =>
+                users?.filter(item => item.status === freeBusy).map((item) =>
                     <div key={item._id} className="mt-2 d-flex justify-content-between align-items-center p-2 gap-2" style={{ boxShadow: `rgba(0, 0, 0, 0.16) 0px 1px 4px` }}>
 
 
@@ -173,7 +171,7 @@ const Dashboard3 = () => {
                         <div className="d-flex gap-3 align-items-center">
 
                             {
-                                item.timeManagment === 'free' ?
+                                item.status === 'free' ?
 
                                     <div className=" position-relative">
 
@@ -198,7 +196,7 @@ const Dashboard3 = () => {
                                 </div>
 
                                
-                                <small>{item.dateStatus}</small>
+                                <small>{item.date}</small>
 
 
                             </div>
@@ -217,7 +215,7 @@ const Dashboard3 = () => {
                                     <Dropdown.Menu className='dropdown-menu'>
                                        
                                         <Dropdown.Item href="#">
-                                            <small className=' justify-content-center align-items-center'>{item.timeStatus}</small>
+                                            <small className=' justify-content-center align-items-center'>{item.time}</small>
                                         </Dropdown.Item>
                                         <Dropdown.Item href="#">
                                             <small className=' justify-content-center align-items-center'> {item.email}</small>
@@ -225,7 +223,7 @@ const Dashboard3 = () => {
                                         <Dropdown.Divider />
                                        
                                         <Dropdown.Item href="#">
-                                            <i className="fas fa-user-alt pe-2"></i>{ item.timeManagment === 'busy' ? <button style={{ border: 'none' }} type="button" className="btn text-success"  onClick={()=>freeButton(item._id,'free')}>Free</button> : <button style={{ border: 'none' }} type="button" className="btn text-danger " onClick={()=>freeButton(item._id,'busy')}>Busy</button>}
+                                            <i className="fas fa-user-alt pe-2"></i>{ item.status === 'busy' ? <button style={{ border: 'none' }} type="button" className="btn text-success"  onClick={()=>freeButton(item._id,'free')}>Free</button> : <button style={{ border: 'none' }} type="button" className="btn text-danger " onClick={()=>freeButton(item._id,'busy')}>Busy</button>}
                                         </Dropdown.Item>
 
 

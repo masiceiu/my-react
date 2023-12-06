@@ -1,5 +1,5 @@
 import React, { Children, createContext, useEffect, useState } from "react";
-import { app } from "../Firebase/Firebase.config";
+import { app, db, addDoc, getDocs, collection } from "../Firebase/Firebase.config";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -18,7 +18,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   //newUserCreate
-  const newUser = (email, password, username, useUrl, mobile, Address) => {
+  const newUser = (email, password, username, useUrl, mobile, address) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const user = result.user;
@@ -28,26 +28,39 @@ const AuthProvider = ({ children }) => {
           phoneNumber: mobile,
         })
           .then(() => {
-            const userInformation = {
-              //email, password, username, useUrl,mobile,Address
+            const req = {
+              auth:{ is_authourize: true },
+              data:{
+              //email, password, username, useUrl,mobile,address
               email: user.email,
               username: user.displayName,
               useUrl: user.photoURL,
               mobile: mobile,
-              Address: Address,
-            };
+              address: address,
+     
+            }};
+            console.log(req)
+            /*
+            const req = {
+              //email, password, username, useUrl,mobile,address
+              email: user.email,
+              username: user.displayName,
+              useUrl: user.photoURL,
+              mobile: mobile,
+              address: address,
+            };*/
             fetch("http://localhost:5000/users", {
                 method:'POST',
                 headers:{
                     "content-type":"application/json"
                 },
-                body: JSON.stringify(userInformation)
+                body: JSON.stringify(req)
             })
               .then((res) => res.json())
               .then((data) => console.log(data));
           })
           .catch((error) => {});
-        setUser(user);
+          //setUser(user);
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -79,10 +92,48 @@ const AuthProvider = ({ children }) => {
       }).catch((error) => {
       });
 }
+/**********************************************************/
+  // Get a list of  from your database
+  const getUsers = (db) => {
+    let id = 0;
+    if(!id){
+      id = setTimeout(()=>
+      {  
+          console.log(id);
+          console.log(db);
+      },100)
+    }
+    /*const reqUsers = collection(db, 'users');
+    const data = reqUsers.then((res)=>res.json())
+    console.log(data);
+    return data;*/
+  }
+  //getUsers(db);
+  const addToDb = async(model) =>{
+    try{
+      const docRef = await addDoc(collection(db,'users'), model);
+      //alert("wellcome new user create successfully")
+      console.log("Document written with ID: ", docRef.id);
+    }catch(error){
+      console.error("Error adding document:", error);
+    }
+  }
 
+ async function getAllUsers() {
+    const usersCollection = collection(db, "users"); // Assuming "users" is the collection name
+    const querySnapshot = await getDocs(usersCollection);
+
+    const users = [];
+     querySnapshot.forEach((doc) => {
+       // Get data from each user document
+       let userData = doc.data();
+       users.push(userData);
+     });
+     return users;
+   }
+/********************************************************************/
   const information = {
     user,
-
     loading,
     newUser,
     login,
