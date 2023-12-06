@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/73590839/uncaught-in-promise-syntaxerror-unexpected-token-doctype-is-not
