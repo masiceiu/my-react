@@ -3,6 +3,9 @@ import { Dropdown, Tab, Tabs } from 'react-bootstrap';
 import { useQuery } from "@tanstack/react-query";
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEllipsisH } from "react-icons/fa";
+const config = {
+  apiUrl: import.meta.env.VITE_API_URL
+}
 import Swal from 'sweetalert2';
 const DashboardChild = () => {
     const [freeBusy, setFreeBusy] = useState('free');
@@ -14,7 +17,7 @@ const DashboardChild = () => {
     } = useQuery({
         queryKey: ["instructorData"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:5000/users");
+            const res = await fetch(`${config.apiUrl}users`);
             const data = await res.json();
             //console.log(data);
             setSearchUsers(data);
@@ -30,7 +33,7 @@ const DashboardChild = () => {
             id: id,
             status: update,
         }};
-        fetch(`http://localhost:5000/users`, {
+        fetch(`${config.apiUrl}users`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json'

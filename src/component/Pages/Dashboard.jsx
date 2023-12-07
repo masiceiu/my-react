@@ -15,7 +15,9 @@ const Dashboard = () => {
         <Col sm={12} className="mx-auto">
            <div>
             <div style={{ flexDirection: 'row-reverse' }} className="d-flex me-5 ">
-              <i onClick={() => setActive(!active)} className="fa-solid fa-ellipsis-vertical align-items-center mt-2 ms-3"></i>
+             <button class="btn btn-link" onClick={() => setActive(!active)}> 
+             <i className="fa-solid fa-ellipsis-vertical"></i>
+             </button>
 
               {active && ( // Conditionally render the logout button based on the 'active' state
                 <Button variant="light">

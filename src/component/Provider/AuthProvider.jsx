@@ -1,5 +1,7 @@
 import React, { Children, createContext, useEffect, useState } from "react";
-import { app, db, addDoc, getDocs, collection } from "../Firebase/Firebase.config";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+
+import { app, db } from "../Firebase/Firebase.config";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -8,7 +10,9 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-
+const config = {
+  apiUrl: import.meta.env.VITE_API_URL
+}
 export const AuthContext = createContext();
 const auth = getAuth(app);
 
@@ -18,6 +22,10 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   //newUserCreate
+  const newUser1 = () => {
+    let url = `${config.apiUrl}users`;
+    console.log(url);
+  }
   const newUser = (email, password, username, useUrl, mobile, address) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
@@ -39,7 +47,7 @@ const AuthProvider = ({ children }) => {
               address: address,
      
             }};
-            console.log(req)
+            //console.log(req)
             /*
             const req = {
               //email, password, username, useUrl,mobile,address
@@ -49,7 +57,7 @@ const AuthProvider = ({ children }) => {
               mobile: mobile,
               address: address,
             };*/
-            fetch("http://localhost:5000/users", {
+            fetch(`${config.apiUrl}users`, {
                 method:'POST',
                 headers:{
                     "content-type":"application/json"
@@ -94,6 +102,13 @@ const AuthProvider = ({ children }) => {
 }
 /**********************************************************/
   // Get a list of  from your database
+  // Get a list of cities from your database
+  /*async function getCities(db) {
+    const citiesCol = collection(db, 'cities');
+    const citySnapshot = await getDocs(citiesCol);
+    const cityList = citySnapshot.docs.map(doc => doc.data());
+    return cityList;
+  }*/
   const getUsers = (db) => {
     let id = 0;
     if(!id){
